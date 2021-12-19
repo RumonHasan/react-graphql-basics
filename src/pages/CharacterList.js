@@ -1,22 +1,10 @@
 import React from 'react';
 import "./character.css";
-// query for characters
-import { useQuery, gql } from '@apollo/client'; // in order to query data
-
-const GET_CHARACTERS = gql`
-    query{
-        characters {
-        results{
-            id
-            name
-            image
-        }
-        }
-    }
-`
+import { useCharacter } from '../hooks/useCharacter';
+import { Link } from 'react-router-dom';
 
 const CharacterList = () => {
-    const {error, data, loading} = useQuery(GET_CHARACTERS);
+    const {error, data, loading} = useCharacter();
     console.log({error, data, loading});
 
     if(loading) return <div>Spinner...</div>
@@ -27,10 +15,10 @@ const CharacterList = () => {
         <div className='char-list'>
             {data.characters.results.map((character)=>{
                 return (
-                    <div>
+                    <Link to={`/${character.id}`}>
                         <img src={character.image} alt={character.image}/>
                         <h2>{character.name}</h2>
-                    </div>
+                    </Link>
                 )
             })}
         </div>
